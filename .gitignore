@@ -4,3 +4,4 @@
 !*.hpp
 !*.cpp
 !.gitignore
+*.txt
