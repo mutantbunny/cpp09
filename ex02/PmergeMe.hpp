@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: coelho <coelho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:48:14 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/10 03:43:28 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/11 05:07:15 by coelho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,62 @@
 # define PMERGE_HPP
 
 # include <vector>
-# include <list>
-# include <string>
+# include <deque>
+#include <utility>
 
 class PmergeMe
 {
 	private:
-		bool hasStraggler;
-		int straggler;
-		std::size_t prevPrevjacobsthal;
-		std::size_t prevJacobsthal;
-		std::size_t curJacobsthal;
-		std::vector<int> chainList;
-		std::vector<int> pendList;
-		std::list<int> mainList;
-		std::vector<int> mainVector;
+		typedef std::pair<int, int> t_int_pair;
+		typedef std::vector<int>::iterator t_vec_it;
+		typedef std::deque<int>::iterator t_deq_it;
+		typedef std::vector<t_int_pair>::iterator t_pair_vec_it;
+		typedef std::deque<t_int_pair>::iterator t_pair_deq_it;
 
-		void mergeSort(std::list<int>::iterator first,
-			std::list<int>::iterator last, size_t size);
-		void mergeSort(std::vector<int>::iterator first,
-			std::vector<int>::iterator last, size_t size);
+		typedef struct s_jacobs {
+			std::size_t jacob_0;
+			std::size_t jacob_1;
+			std::size_t jacob_2;
+		} t_jacobs;
 
-		void insertionSort(std::list<int>::iterator first,
-			std::list<int>::iterator last, size_t size);
-		void insertionSort(std::vector<int>::iterator first,
-			std::vector<int>::iterator last, size_t size);
+		t_vec_it binary_search(t_vec_it start, t_vec_it end, int needle);
+		t_deq_it binary_search(t_deq_it start, t_deq_it end, int needle);
 
+		static void make_pairs(std::vector<int> &src,
+			std::vector<t_int_pair> &dst);
+		static void make_pairs(std::deque<int> &src,
+			std::deque<t_int_pair> &dst);
 
+		static void mergesort(std::vector<t_int_pair> &v);
+		static void mergesort(t_pair_vec_it start, t_pair_vec_it end,
+			std::vector<t_int_pair> tmp);
+		static void merge(t_pair_vec_it start, t_pair_vec_it mid,
+			t_pair_vec_it end, std::vector<t_int_pair> &tmp);
 
-		std::size_t binarySearch(int n);
-		void initJacobsthal(void);
-		std::size_t nextJacobsthal(void);
+		static void mergesort(std::deque<t_int_pair> &d);
+		static void mergesort(t_pair_deq_it start, t_pair_deq_it end,
+			std::deque<t_int_pair> tmp);
+		static void merge(t_pair_deq_it start, t_pair_deq_it mid,
+			t_pair_deq_it end, std::deque<t_int_pair> &tmp);
 
-	public:
+		static void insert_second(std::vector<int> &chain, int n);
+		static void insert_second(std::deque<int> &chain, 	int n);
+
+		static void transfer_to_chain(std::vector<t_int_pair> &pend,
+			std::vector<int> &chain);
+		static void transfer_to_chain(std::deque<t_int_pair> &pend,
+			std::deque<int> &chain);
+
+		static std::size_t next_jacob(t_jacobs &jacobs);
+
 		PmergeMe(void);
 		PmergeMe(const PmergeMe &src);
-		PmergeMe(const std::string &str);
 		~PmergeMe(void);
 		PmergeMe &operator=(const PmergeMe &src);
 
+	public:
+		static void sort(std::vector<int> &v);
+		static void sort(std::deque<int> &d);
 };
 
 #endif
