@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:35 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/02 22:30:36 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/13 01:02:40 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ RPN &RPN::operator=(const RPN &src)
 	return *this;
 }
 
-void RPN::check_size(const std::stack<int> &st)
+void RPN::check_size(const std::stack<int, std::list<int> > &st)
 {
 	if (st.size() < 2)
 		throw std::domain_error("Invalid format");
 }
 
-void RPN::add(std::stack<int> &st)
+void RPN::add(std::stack<int, std::list<int> > &st)
 {
 	check_size(st);
 
@@ -43,7 +43,7 @@ void RPN::add(std::stack<int> &st)
 	st.push(left + right);
 }
 
-void RPN::divide(std::stack<int> &st)
+void RPN::divide(std::stack<int, std::list<int> > &st)
 {
 	check_size(st);
 
@@ -56,7 +56,7 @@ void RPN::divide(std::stack<int> &st)
 	st.push(left / right);
 }
 
-void RPN::multiply(std::stack<int> &st)
+void RPN::multiply(std::stack<int, std::list<int> > &st)
 {
 	check_size(st);
 
@@ -69,7 +69,7 @@ void RPN::multiply(std::stack<int> &st)
 	st.push(left * right);
 }
 
-void RPN::subtract(std::stack<int> &st)
+void RPN::subtract(std::stack<int, std::list<int> > &st)
 {
 	check_size(st);
 
@@ -84,7 +84,7 @@ void RPN::subtract(std::stack<int> &st)
 
 int RPN::calculate(const std::string &ops)
 {
-	std::stack<int> st;
+	std::stack<int, std::list<int> > st;
 
 	for (size_t i = 0; i < ops.size(); ++i)
 	{

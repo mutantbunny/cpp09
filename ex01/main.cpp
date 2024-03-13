@@ -6,10 +6,11 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:23 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/02 22:34:58 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/13 01:02:04 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include <iostream>
 #include "RPN.hpp"
 
 static void print_error(const char *name, const char* msg)
