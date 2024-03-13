@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: coelho <coelho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:48:14 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/11 05:07:15 by coelho           ###   ########.fr       */
+/*   Updated: 2024/03/12 21:58:27 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # include <vector>
 # include <deque>
-#include <utility>
+//# include <utility>
+# include <iostream>
 
 class PmergeMe
 {
@@ -27,13 +28,14 @@ class PmergeMe
 		typedef std::deque<t_int_pair>::iterator t_pair_deq_it;
 
 		typedef struct s_jacobs {
-			std::size_t jacob_0;
-			std::size_t jacob_1;
-			std::size_t jacob_2;
+			std::size_t jacob_prev;
+			std::size_t jacob_cur;
+			std::size_t jacob_seq;
+			std::size_t next_pos;
 		} t_jacobs;
 
-		t_vec_it binary_search(t_vec_it start, t_vec_it end, int needle);
-		t_deq_it binary_search(t_deq_it start, t_deq_it end, int needle);
+		static t_vec_it binary_search(std::vector<int> &v, int needle);
+		static t_deq_it binary_search(std::deque<int> &d, int needle);
 
 		static void make_pairs(std::vector<int> &src,
 			std::vector<t_int_pair> &dst);
@@ -42,13 +44,13 @@ class PmergeMe
 
 		static void mergesort(std::vector<t_int_pair> &v);
 		static void mergesort(t_pair_vec_it start, t_pair_vec_it end,
-			std::vector<t_int_pair> tmp);
+			std::vector<t_int_pair> &tmp);
 		static void merge(t_pair_vec_it start, t_pair_vec_it mid,
 			t_pair_vec_it end, std::vector<t_int_pair> &tmp);
 
 		static void mergesort(std::deque<t_int_pair> &d);
 		static void mergesort(t_pair_deq_it start, t_pair_deq_it end,
-			std::deque<t_int_pair> tmp);
+			std::deque<t_int_pair> &tmp);
 		static void merge(t_pair_deq_it start, t_pair_deq_it mid,
 			t_pair_deq_it end, std::deque<t_int_pair> &tmp);
 
@@ -60,7 +62,8 @@ class PmergeMe
 		static void transfer_to_chain(std::deque<t_int_pair> &pend,
 			std::deque<int> &chain);
 
-		static std::size_t next_jacob(t_jacobs &jacobs);
+		static void init_jacobs(t_jacobs &jacobs);
+		static std::size_t next_idx(t_jacobs &jacobs, size_t limit);
 
 		PmergeMe(void);
 		PmergeMe(const PmergeMe &src);

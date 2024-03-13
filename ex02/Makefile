@@ -1,14 +1,14 @@
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -ggdb -std=c++98
+CFLAGS = -Wall -Wextra -Werror -O3 -ggdb -std=c++98
 RM = rm -f
 
 NAME = PmergeMe
 
-SRCS = main.cpp PmergeMe.cpp
+SRCS = main.cpp PmergeMe.cpp utils.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-INCS = PmergeMe.hpp
+INCS = PmergeMe.hpp utils.hpp
 
 all: $(NAME)
 
