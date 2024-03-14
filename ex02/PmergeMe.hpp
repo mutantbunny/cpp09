@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:48:14 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/12 21:58:27 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:44:32 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,19 @@
 
 # include <vector>
 # include <deque>
-//# include <utility>
 # include <iostream>
+# include <sstream>
+# include <ctime>
+# include <limits>
 
 class PmergeMe
 {
 	private:
-		typedef std::pair<int, int> t_int_pair;
-		typedef std::vector<int>::iterator t_vec_it;
-		typedef std::deque<int>::iterator t_deq_it;
+		typedef std::vector<unsigned int> uint_vec;
+		typedef std::deque<unsigned int> uint_deq;
+		typedef std::pair<unsigned int, unsigned int> t_int_pair;
+		typedef uint_vec::iterator t_vec_it;
+		typedef uint_deq::iterator t_deq_it;
 		typedef std::vector<t_int_pair>::iterator t_pair_vec_it;
 		typedef std::deque<t_int_pair>::iterator t_pair_deq_it;
 
@@ -34,13 +38,11 @@ class PmergeMe
 			std::size_t next_pos;
 		} t_jacobs;
 
-		static t_vec_it binary_search(std::vector<int> &v, int needle);
-		static t_deq_it binary_search(std::deque<int> &d, int needle);
+		static t_vec_it binary_search(uint_vec &v, unsigned int needle);
+		static t_deq_it binary_search(uint_deq &d, unsigned int needle);
 
-		static void make_pairs(std::vector<int> &src,
-			std::vector<t_int_pair> &dst);
-		static void make_pairs(std::deque<int> &src,
-			std::deque<t_int_pair> &dst);
+		static void make_pairs(uint_vec &src, std::vector<t_int_pair> &dst);
+		static void make_pairs(uint_deq &src, std::deque<t_int_pair> &dst);
 
 		static void mergesort(std::vector<t_int_pair> &v);
 		static void mergesort(t_pair_vec_it start, t_pair_vec_it end,
@@ -54,13 +56,13 @@ class PmergeMe
 		static void merge(t_pair_deq_it start, t_pair_deq_it mid,
 			t_pair_deq_it end, std::deque<t_int_pair> &tmp);
 
-		static void insert_second(std::vector<int> &chain, int n);
-		static void insert_second(std::deque<int> &chain, 	int n);
+		static void insert_second(uint_vec &chain, unsigned int n);
+		static void insert_second(uint_deq &chain, 	unsigned int n);
 
 		static void transfer_to_chain(std::vector<t_int_pair> &pend,
-			std::vector<int> &chain);
+			uint_vec &chain);
 		static void transfer_to_chain(std::deque<t_int_pair> &pend,
-			std::deque<int> &chain);
+			uint_deq &chain);
 
 		static void init_jacobs(t_jacobs &jacobs);
 		static std::size_t next_idx(t_jacobs &jacobs, size_t limit);
@@ -71,8 +73,14 @@ class PmergeMe
 		PmergeMe &operator=(const PmergeMe &src);
 
 	public:
-		static void sort(std::vector<int> &v);
-		static void sort(std::deque<int> &d);
+		static void print_contents(uint_vec &v);
+		static void print_contents(uint_deq &d);
+		static void parse_input(int argc, char **argv, uint_vec &v);
+		static void parse_input(int argc, char **argv, uint_deq &d);
+		static double timed_vector_sort(int argc, char **argv, uint_vec &v);
+		static double timed_deque_sort(int argc, char **argv, uint_deq &d);
+		static void sort(uint_vec &v);
+		static void sort(uint_deq &d);
 };
 
 #endif

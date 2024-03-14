@@ -6,13 +6,11 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:41 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/12 23:04:04 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:44:01 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-#include <cstddef>
-#include <iterator>
 
 PmergeMe::PmergeMe(void) { }
 
@@ -26,7 +24,7 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 	return *this;
 }
 
-PmergeMe::t_vec_it PmergeMe::binary_search(std::vector<int> &v, int needle)
+PmergeMe::t_vec_it PmergeMe::binary_search(uint_vec &v, unsigned int needle)
 {
 	if (v.size() < 1)
 		return v.begin();
@@ -49,7 +47,7 @@ PmergeMe::t_vec_it PmergeMe::binary_search(std::vector<int> &v, int needle)
 	return result;
 }
 
-PmergeMe::t_deq_it PmergeMe::binary_search(std::deque<int> &d, int needle)
+PmergeMe::t_deq_it PmergeMe::binary_search(uint_deq &d, unsigned int needle)
 {
 	if (d.size() < 1)
 		return d.begin();
@@ -72,7 +70,7 @@ PmergeMe::t_deq_it PmergeMe::binary_search(std::deque<int> &d, int needle)
 	return result;
 }
 
-void PmergeMe::make_pairs(std::vector<int> &src, std::vector<t_int_pair> &dst)
+void PmergeMe::make_pairs(uint_vec &src, std::vector<t_int_pair> &dst)
 {
 	dst.clear();
 
@@ -85,7 +83,7 @@ void PmergeMe::make_pairs(std::vector<int> &src, std::vector<t_int_pair> &dst)
 	}
 }
 
-void PmergeMe::make_pairs(std::deque<int> &src, std::deque<t_int_pair> &dst)
+void PmergeMe::make_pairs(uint_deq &src, std::deque<t_int_pair> &dst)
 {
 	dst.clear();
 
@@ -202,14 +200,14 @@ void PmergeMe::merge(t_pair_deq_it start, t_pair_deq_it mid,
 	std::copy(tmp.begin(), tmp.end(), start);
 }
 
-void PmergeMe::insert_second(std::vector<int> &chain, int n)
+void PmergeMe::insert_second(uint_vec &chain, unsigned int n)
 {
 	t_vec_it pos = binary_search(chain, n);
 
 	chain.insert(pos, n);
 }
 
-void PmergeMe::insert_second(std::deque<int> &chain, int n)
+void PmergeMe::insert_second(uint_deq &chain, unsigned int n)
 {
 	t_deq_it pos = binary_search(chain, n);
 
@@ -240,7 +238,7 @@ std::size_t PmergeMe::next_idx(t_jacobs &jacobs, size_t limit)
 }
 
 void PmergeMe::transfer_to_chain(std::vector<t_int_pair> &pend,
-	std::vector<int> &chain)
+	uint_vec &chain)
 {
 	const t_pair_vec_it begin = pend.begin();
 	t_jacobs jacobs;
@@ -262,7 +260,7 @@ void PmergeMe::transfer_to_chain(std::vector<t_int_pair> &pend,
 }
 
 void PmergeMe::transfer_to_chain(std::deque<t_int_pair> &pend,
-	std::deque<int> &chain)
+	uint_deq &chain)
 {
 	const t_pair_deq_it begin = pend.begin();
 	t_jacobs jacobs;
@@ -283,11 +281,11 @@ void PmergeMe::transfer_to_chain(std::deque<t_int_pair> &pend,
 	}
 }
 
-void PmergeMe::sort(std::vector<int> &v)
+void PmergeMe::sort(uint_vec &v)
 {
 	bool has_straggler;
-	int straggler;
-	const int v_size = v.size();
+	unsigned int straggler;
+	const size_t v_size = v.size();
 
 	if (v_size < 2)
 		return;
@@ -311,11 +309,11 @@ void PmergeMe::sort(std::vector<int> &v)
 		insert_second(v, straggler);
 }
 
-void PmergeMe::sort(std::deque<int> &d)
+void PmergeMe::sort(uint_deq &d)
 {
 	bool has_straggler;
-	int straggler;
-	const int d_size = d.size();
+	unsigned int straggler;
+	const size_t d_size = d.size();
 
 	if (d_size < 2)
 		return;
@@ -337,4 +335,96 @@ void PmergeMe::sort(std::deque<int> &d)
 
 	if (has_straggler)
 		insert_second(d, straggler);
+}
+
+void PmergeMe::parse_input(int argc, char **argv, uint_vec &v)
+{
+	std::istringstream ss;
+	std::string tmp_str;
+	long tmp_num;
+
+	for (int i = 1; i < argc; i++)
+	{
+		tmp_str = argv[i];
+		if (tmp_str.size() == 0)
+			throw std::domain_error("Invalid input => Empty string");
+		ss.clear();
+		ss.str(tmp_str);
+		ss >> tmp_num;
+
+		if (ss.fail() || !ss.eof() || tmp_num < 0
+			|| tmp_num > std::numeric_limits<unsigned int>::max())
+			throw std::domain_error("Invalid input => " + tmp_str);
+
+		v.push_back(tmp_num);
+	}
+}
+
+void PmergeMe::parse_input(int argc, char **argv, uint_deq &v)
+{
+	std::istringstream ss;
+	std::string tmp_str;
+	long tmp_num;
+
+	for (int i = 1; i < argc; i++)
+	{
+		ss.clear();
+		tmp_str = argv[i];
+		ss.str(tmp_str);
+		ss >> tmp_num;
+
+		if (ss.fail() || !ss.eof() || tmp_num < 0
+			|| tmp_num > std::numeric_limits<unsigned int>::max())
+			throw std::domain_error("Invalid input => " + tmp_str);
+
+		v.push_back(tmp_num);
+	}
+}
+
+void PmergeMe::print_contents(uint_vec &v)
+{
+	uint_vec::iterator it;
+
+	for (it = v.begin(); it != v.end() - 1; ++it)
+		std::cout << *it << ' ';
+
+	std::cout << *it << std::endl;
+}
+
+void PmergeMe::print_contents(uint_deq &d)
+{
+	uint_deq::iterator it;
+
+	for (it = d.begin(); it != d.end() - 1; ++it)
+		std::cout << *it << ' ';
+
+	std::cout << *it << std::endl;
+}
+
+double PmergeMe::timed_vector_sort(int argc, char **argv, uint_vec &v)
+{
+	struct timespec start_time;
+	struct timespec end_time;
+
+	clock_gettime(CLOCK_MONOTONIC, &start_time);
+	parse_input(argc, argv, v);
+	PmergeMe::sort(v);
+	clock_gettime(CLOCK_MONOTONIC, &end_time);
+
+	return (end_time.tv_sec - start_time.tv_sec) * 1000000.0
+		+ (end_time.tv_nsec - start_time.tv_nsec) / 1000.0;
+}
+
+double PmergeMe::timed_deque_sort(int argc, char **argv, uint_deq &d)
+{
+	struct timespec start_time;
+	struct timespec end_time;
+
+	clock_gettime(CLOCK_MONOTONIC, &start_time);
+	parse_input(argc, argv, d);
+	PmergeMe::sort(d);
+	clock_gettime(CLOCK_MONOTONIC, &end_time);
+
+	return (end_time.tv_sec - start_time.tv_sec) * 1000000.0
+		+ (end_time.tv_nsec - start_time.tv_nsec) / 1000.0;
 }

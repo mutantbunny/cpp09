@@ -4,11 +4,11 @@ RM = rm -f
 
 NAME = PmergeMe
 
-SRCS = main.cpp PmergeMe.cpp utils.cpp
+SRCS = main.cpp PmergeMe.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-INCS = PmergeMe.hpp utils.hpp
+INCS = PmergeMe.hpp
 
 all: $(NAME)
 
@@ -25,7 +25,7 @@ fclean: clean
 	$(RM) $(NAME)
 
 leaks: $(NAME)
-	valgrind --leak-check=full ./$(NAME)
+	valgrind --leak-check=full ./$(NAME) `shuf -i 1-100000 -n 3000 | tr "\n" " "`
 
 re: fclean all
 
