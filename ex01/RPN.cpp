@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:35 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/13 01:02:40 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/15 01:26:46 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,36 +85,50 @@ void RPN::subtract(std::stack<int, std::list<int> > &st)
 int RPN::calculate(const std::string &ops)
 {
 	std::stack<int, std::list<int> > st;
+	bool should_be_space = false;
 
 	for (size_t i = 0; i < ops.size(); ++i)
 	{
 		char ch = ops[i];
 
+		if (should_be_space)
+		{
+			if (ch != ' ')
+				throw std::domain_error("Invalid format");
+			should_be_space = false;
+		}
+
 		if (std::isdigit(ch))
 		{
 			st.push(static_cast<int>(ch - '0'));
+			should_be_space = true;
 			continue;
 		}
 
 		switch(ch)
 		{
 			case ' ':
+				should_be_space = false;
 				continue;
 
 			case '+':
 				add(st);
+				should_be_space = true;
 				continue;
 
 			case '/':
 				divide(st);
+				should_be_space = true;
 				continue;
 
 			case '*':
 				multiply(st);
+				should_be_space = true;
 				continue;
 
 			case '-':
 				subtract(st);
+				should_be_space = true;
 				continue;
 		}
 
