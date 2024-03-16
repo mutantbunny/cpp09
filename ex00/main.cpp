@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:23 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/16 16:27:11 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 18:22:54 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
 	catch (std::exception & e)
 	{
 		std::cerr << "Error: " << e.what()  << std::endl;
+		return 1;
 	}
-
 
 	return 0;
 }

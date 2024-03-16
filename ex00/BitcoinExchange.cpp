@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:14 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/16 18:14:37 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 18:44:18 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,17 @@ void BitcoinExchange::load_csv(const std::string &filename)
 
 	while (std::getline(csv, line))
 	{
-		std::pair<std::string, double> parsed_line = parse_csv_line(line);
-		db->insert(parsed_line);
+		try
+		{
+			std::pair<std::string, double> parsed_line = parse_csv_line(line);
+			db->insert(parsed_line);
+		}
+		catch (std::domain_error &e)
+		{
+			std::cerr << "Error: " << e.what() << " - while parsing database"
+				<<std::endl;
+		}
+
 	}
 }
 
@@ -155,8 +164,11 @@ void BitcoinExchange::process_input_file(const char *filename)
 {
 	std::ifstream infile(filename);
 
-	if (!infile)
+	if (infile.fail())
 		throw std::runtime_error("Could not open input file");
+
+	if (!db || db->empty())
+		throw EmptyDBException();
 
 	std::string line;
 
@@ -167,9 +179,21 @@ void BitcoinExchange::process_input_file(const char *filename)
 	{
 		std::pair<std::string, double> input_pair;
 
-		input_pair = BitcoinExchange::parse_input_line(line);
-		double rate = get_exchange_rate(input_pair.first);
-		print_result(input_pair.first, input_pair.second, rate);
+		try
+		{
+			input_pair = BitcoinExchange::parse_input_line(line);
+			double rate = get_exchange_rate(input_pair.first);
+			print_result(input_pair.first, input_pair.second, rate);
+		}
+		catch (NotFoundException &e)
+		{
+			std:: cerr << "Error: " << e.what() << std::endl;
+		}
+		catch (std::domain_error &e)
+		{
+			std:: cerr << "Error: " << e.what() << std::endl;
+		}
+
 	}
 }
 
