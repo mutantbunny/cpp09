@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:14 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/16 18:44:18 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 19:35:36 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,51 @@ double BitcoinExchange::parse_number(const std::string &num_str)
 	return d;
 }
 
+bool BitcoinExchange::is_valid_day(std::tm &tm)
+{
+	switch(tm.tm_mon)
+	{
+		case 0:
+		case 2:
+		case 4:
+		case 6:
+		case 7:
+		case 9:
+		case 11:
+			return tm.tm_mday > 31 ? false : true;
+
+		case 3:
+		case 5:
+		case 8:
+		case 10:
+			return tm.tm_mday > 30 ? false : true;
+
+		case 1:
+			if (tm.tm_mday <= 28)
+				return true;
+
+			if (tm.tm_mday > 29)
+				return false;
+
+			int year = 1900 + tm.tm_year;
+
+			if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+				return true;
+
+			return false;
+	}
+
+	return false;
+}
+
 std::string BitcoinExchange::parse_date(const std::string &date_str)
 {
 	std::tm tm;
 
 	if (!strptime(date_str.c_str(), "%Y-%m-%d", &tm))
+		throw std::domain_error("bad input => " + date_str);
+
+	if (!is_valid_day(tm))
 		throw std::domain_error("bad input => " + date_str);
 
 	return date_str;
@@ -156,8 +196,7 @@ std::pair<std::string, double>
 void BitcoinExchange::print_result(const std::string & date,
 			const double amount, const double rate)
 {
-	std::cout << date << " => " << amount << " = " << std::setprecision(2)
-		<< amount * rate <<std::endl;
+	std::cout << date << " => " << amount << " = " << amount * rate <<std::endl;
 }
 
 void BitcoinExchange::process_input_file(const char *filename)
