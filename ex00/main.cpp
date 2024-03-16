@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:23 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/02 03:37:23 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 16:27:11 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,16 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	BitcoinExchange exchange("data.csv");
+	try
+	{
+		BitcoinExchange exchange("data.csv");
+		exchange.process_input_file(argv[1]);
+	}
+	catch (std::exception & e)
+	{
+		std::cerr << "Error: " << e.what()  << std::endl;
+	}
 
-	exchange.process_input_file(argv[1]);
+
 	return 0;
 }

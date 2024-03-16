@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:14 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/02 04:12:40 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 18:14:37 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
 	db = new std::map<std::string, double>(*(src.db));
 }
 
-BitcoinExchange::BitcoinExchange(const std::string &filename)
+BitcoinExchange::BitcoinExchange(const std::string &filename) : db(NULL)
 {
 	load_csv(filename);
 }
@@ -97,12 +97,11 @@ void BitcoinExchange::load_csv(const std::string &filename)
 {
 	std::ifstream csv(filename.c_str());
 
-	if (!csv)
+	if (csv.fail())
 	{
-		std::cerr << "Error: could not open open database file." << std::endl;
 		delete this->db;
 		this->db = NULL;
-		return;
+		throw std::runtime_error("Could not open database file");
 	}
 
 	this->db = new std::map<std::string, double>();
@@ -113,15 +112,8 @@ void BitcoinExchange::load_csv(const std::string &filename)
 
 	while (std::getline(csv, line))
 	{
-		try
-		{
-			std::pair<std::string, double> parsed_line = parse_csv_line(line);
-			db->insert(parsed_line);
-		}
-		catch (const std::exception &e)
-		{
-			std::cerr << "Error: " << e.what()  << '.' << std::endl;
-		}
+		std::pair<std::string, double> parsed_line = parse_csv_line(line);
+		db->insert(parsed_line);
 	}
 }
 
@@ -155,7 +147,8 @@ std::pair<std::string, double>
 void BitcoinExchange::print_result(const std::string & date,
 			const double amount, const double rate)
 {
-	std::cout << date << " => " << amount << " = " << amount * rate <<std::endl;
+	std::cout << date << " => " << amount << " = " << std::setprecision(2)
+		<< amount * rate <<std::endl;
 }
 
 void BitcoinExchange::process_input_file(const char *filename)
@@ -163,10 +156,7 @@ void BitcoinExchange::process_input_file(const char *filename)
 	std::ifstream infile(filename);
 
 	if (!infile)
-	{
-		std::cerr << "Error: Could not open input file." << std::endl;
-		return;
-	}
+		throw std::runtime_error("Could not open input file");
 
 	std::string line;
 
@@ -177,25 +167,9 @@ void BitcoinExchange::process_input_file(const char *filename)
 	{
 		std::pair<std::string, double> input_pair;
 
-		try
-		{
-			input_pair = BitcoinExchange::parse_input_line(line);
-			double rate = get_exchange_rate(input_pair.first);
-			print_result(input_pair.first, input_pair.second, rate);
-		}
-		catch (const std::domain_error &e)
-		{
-			std::cerr << "Error: " << e.what() << std::endl;
-		}
-		catch (const NotFoundException &e)
-		{
-			std::cerr << "Error: " << e.what() << std::endl;
-		}
-		catch (const std::exception &e)
-		{
-			std::cerr << "Error: " << e.what() << std::endl;
-			return;
-		}
+		input_pair = BitcoinExchange::parse_input_line(line);
+		double rate = get_exchange_rate(input_pair.first);
+		print_result(input_pair.first, input_pair.second, rate);
 	}
 }
 

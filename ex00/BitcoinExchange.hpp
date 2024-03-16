@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:18 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/02 04:04:08 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 18:13:51 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <iostream>
 # include <map>
 # include <sstream>
+# include <iomanip>
 
 class BitcoinExchange
 {

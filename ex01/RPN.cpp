@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:35 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/15 01:26:46 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/15 21:25:57 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ void RPN::divide(std::stack<int, std::list<int> > &st)
 
 	int left = st.top();
 	st.pop();
+
+	if (right == 0)
+		throw std::domain_error("Integer divide by zero");
 
 	st.push(left / right);
 }
