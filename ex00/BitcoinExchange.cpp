@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:14 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/16 19:35:36 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 19:40:28 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ double BitcoinExchange::parse_number(const std::string &num_str)
 	return d;
 }
 
-bool BitcoinExchange::is_valid_day(std::tm &tm)
+bool BitcoinExchange::is_valid_day(const std::tm &tm)
 {
 	switch(tm.tm_mon)
 	{

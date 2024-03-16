@@ -6,7 +6,7 @@
 /*   By: gmachado <gmachado@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 04:47:18 by gmachado          #+#    #+#             */
-/*   Updated: 2024/03/16 19:09:14 by gmachado         ###   ########.fr       */
+/*   Updated: 2024/03/16 19:40:12 by gmachado         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class BitcoinExchange
 		std::map<std::string, double> *db;
 
 		static double parse_number(const std::string &num_str);
-		static bool is_valid_day(std::tm &tm);
+		static bool is_valid_day(const std::tm &tm);
 		static std::string parse_date(const std::string &date_str);
 		static std::pair<std::string, double>
 			parse_csv_line(const std::string &line);
